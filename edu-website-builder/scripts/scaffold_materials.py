@@ -10,7 +10,8 @@ Usage:
 Keys (create only the ones the Needs Assessment Form ticked; branding, hero,
 and misc are always created):
   about leadership departments faculty news events gallery downloads
-  admissions portal committees contact
+  admissions portal committees contact roles mobileapp qec societies
+  sports hostel journal
 
 Examples:
   python scaffold_materials.py --root .            # core only (branding/hero/misc)
@@ -36,6 +37,13 @@ FOLDERS = {
     "portal":      "12-portal-roster",
     "committees":  "13-committees-societies",
     "contact":     "14-contact-details",
+    "roles":       "15-roles-and-offices",
+    "mobileapp":   "16-mobile-app",
+    "qec":         "17-qec",
+    "societies":   "18-student-societies",
+    "sports":      "19-sports",
+    "hostel":      "20-hostel",
+    "journal":     "21-journal-and-blog",
     "misc":        "99-anything-else",
 }
 
@@ -60,7 +68,11 @@ READMES = {
         "(e.g. 'Geography', 'Computer Science'). Inside each subfolder:\n"
         "  - banner.jpg  (landscape banner)\n"
         "  - profile.md (or .docx): intro, vision, mission, programme details\n"
-        "    (name, duration, seats, fee, affiliation), achievements\n"
+        "    (name, duration, seats, fee, affiliation), achievements, research\n"
+        "  - scheme-of-studies.pdf  (or .csv with headers:\n"
+        "    semester,course_code,course_title,credit_hours)\n"
+        "  - labs/  subfolder with lab / department photos (optional)\n"
+        "  - accent.txt  (optional: the department's own hex colour)\n"
         "  - faculty/  subfolder containing:\n"
         "      * one portrait per teacher, NAMED AS THEIR FULL NAME\n"
         "        (e.g. 'Zulfiqar Ali.jpg')\n"
@@ -90,8 +102,10 @@ READMES = {
     "portal": "CSV files the student/staff portal imports (fill what you have;\n"
         "the rest can be added in the admin screens later). NEVER put real\n"
         "passwords in these files. Templates provided here:\n"
-        "  - staff.csv, students.csv, programs.csv, sections.csv,\n"
-        "    subjects.csv, enrollments.csv, timetable.csv\n",
+        "  - staff.csv, students.csv, guardians.csv, programs.csv,\n"
+        "    sections.csv, subjects.csv, enrollments.csv, offerings.csv,\n"
+        "    timetable.csv\n"
+        "  - the current timetable as PDF/image too, if that's what you have\n",
     "committees": "Create ONE SUBFOLDER PER COMMITTEE, named as the committee.\n"
         "Inside each:\n"
         "  - members.csv  (headers: name,role,photo)\n"
@@ -101,6 +115,34 @@ READMES = {
         "  - contact.txt: address, phone(s), public email, office hours, AND the\n"
         "    email address(es) that should receive contact-form messages\n"
         "  - map.txt (optional): latitude,longitude or a Google Maps link\n",
+    "roles": "Who holds which office, so access is right on day one.\n"
+        "  - offices.csv  (template provided here). Use OFFICIAL emails.\n"
+        "    Include every HoD and coordinator, one row per department.\n",
+    "mobileapp": "Put here:\n"
+        "  - app-icon.png  (square, 1024x1024, no transparency)\n"
+        "  - app-name.txt: the app's display name\n"
+        "  - custodian.txt: name/office of the person who will keep the app's\n"
+        "    signing key safe (NEVER put the key itself here)\n",
+    "qec": "Put here:\n"
+        "  - questionnaire.docx/.pdf, only if you don't use the HEC standard one\n"
+        "  - SAR and other QEC documents (PDF) to publish\n"
+        "  - cycles.txt: evaluation windows (e.g. last 2 weeks of each semester)\n",
+    "societies": "Put here:\n"
+        "  - societies.csv and cabinet.csv  (templates provided here)\n"
+        "  - one logo/photo per society, NAMED AS THE SOCIETY\n"
+        "  - events.csv for upcoming events (same headers as 08-events)\n",
+    "sports": "Put here:\n"
+        "  - disciplines.csv  (template provided here)\n"
+        "  - photos of teams / grounds / trophies\n",
+    "hostel": "Put here:\n"
+        "  - rooms.csv  (template provided here): ONE ROW PER BED\n"
+        "  - rules.md: hostel rules, fee, and the merit formula you use\n"
+        "  - hostel photos\n",
+    "journal": "Put here:\n"
+        "  - journal.txt: journal name, ISSN (if any), scope, frequency\n"
+        "  - editorial-board.csv  (template provided here) + member photos\n"
+        "  - author-guidelines.md\n"
+        "  - any back issues as PDF\n",
     "misc": "Anything that doesn't fit the other folders — extra photos,\n"
         "reference material, notes, a document describing a special requirement.\n"
         "Nothing here is required.\n",
@@ -120,8 +162,16 @@ CSV_TEMPLATES = {
         "sections.csv":     "section,program_code,term",
         "subjects.csv":     "code,name,program_code",
         "enrollments.csv":  "registration_no,section,term",
+        "guardians.csv":    "registration_no,guardian_name,relation,phone_e164,email",
+        "offerings.csv":    "subject_code,section,term,teacher_google_email,combined_with_sections",
         "timetable.csv":    "section,subject,day,period,start_time,end_time,room",
     },
+    "roles":     {"offices.csv": "office,department,full_name,official_email"},
+    "societies": {"societies.csv": "society,incharge_name,incharge_email,description",
+                  "cabinet.csv": "name,position,program,photo"},
+    "sports":    {"disciplines.csv": "discipline,incharge_name,season,venue"},
+    "hostel":    {"rooms.csv": "hostel,block,room,bed,status"},
+    "journal":   {"editorial-board.csv": "name,role,affiliation,email,photo"},
     # sample dropped at the top of 05-departments; copy into each dept's faculty/ folder as faculty.csv
     "departments": {"faculty-template.csv":
                     "name,designation,subject,qualification,email,phone,is_head"},

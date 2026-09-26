@@ -98,6 +98,31 @@ never be baked into the cached HTML** (the flash-popup pattern).
 - A disposable script that grants access without a password must be deleted in
   the very next action after its one use — especially on a public host.
 
+## Lessons from the second phase (sub-sites, mobile API, directorates)
+
+- **Authenticated API responses must never be page-cached.** On the live build
+  LiteSpeed cached a signed-in mobile-API response and served it to another
+  account. Mark every REST route that reads a bearer token no-cache (the
+  LiteSpeed action hook, not just headers) and test with two accounts.
+- **LiteSpeed strips the `Authorization` header** — read
+  `REDIRECT_HTTP_AUTHORIZATION` as a fallback.
+- **Subdomains on shared hosting:** the panel may create a *nested* docroot per
+  subdomain. Point each at a tiny bootstrap that loads the one shared router
+  instead of duplicating code; disable WordPress's canonical redirect for those
+  hosts, force a 200, and allow `*.domain` as a safe redirect target so portal
+  logins return to the sub-site. SSL for each subdomain is issued separately.
+- **Session starts kill page caching.** Scope `session_start()` to the portal
+  pages that need it, or every public page becomes uncacheable.
+- **Host-header trust:** never gate a demo/admin helper on `$_SERVER['HTTP_HOST']`
+  — it is client-controlled.
+- **Site-wide 500s that come and go** may be one bad CDN edge node, not your
+  code — compare responses across edges before debugging PHP.
+- **Android signing key = the app's identity.** Lose it and every install must be
+  uninstalled. Keep it outside the repo with a named custodian; bump
+  `versionCode` every release.
+- **Front-end portal passcodes** (in-charge, provost, bursar…) are stored hashed
+  and rotated at handover. Don't write their defaults into documentation.
+
 ## Content-data caveat
 
 Hand-edited CMS content (ACF fields, photo assignments) lives only in the
