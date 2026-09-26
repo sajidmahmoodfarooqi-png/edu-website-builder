@@ -2,7 +2,7 @@
 
 **Status:** draft; owner decisions recorded in §10. Nothing is built yet.
 **Author:** Sajid Mahmood Farooqi, with Claude Code.
-**Licence:** MIT (agent, library, form, generator).
+**Licence:** MIT, copyright Sajid Mahmood Farooqi. The form, skill and this design are public now; the module library (**EduCore**) is in a private repo until its first generated sites pass their checks, then published (§10).
 
 > **Naming rule.** The college site this kit was distilled from is called the
 > **reference build** in every agent-facing artefact. Its brand name, domain,
@@ -370,5 +370,7 @@ Phases A–C are valuable on their own: they turn the kit into a real template.
 | 1 | Code prefix | Per build: the institution's choice (NAF §12), else the agent's suggestion, approved at G1. Library uses `__PFX__`. The reference brand is never used anywhere in the agent. |
 | 2 | Local environment | Docker (`docker compose`: WordPress + MariaDB + PHP). Local by WP Engine is not used. |
 | 3 | Who runs it | Institutions upload their NAF through an intake portal (§3.4). |
-| 4 | Licence | MIT. |
+| 4 | Licence | MIT, copyright Sajid Mahmood Farooqi. Library private first (option 3), public later (option 1). |
+| 6 | Theme name | **EduCore**, author Sajid Mahmood Farooqi (credit shown in every generated theme's header). |
+| 7 | Library home | Private GitHub repo `edu-core` (local `G:\Projects\14_EduCore_Library`), flipped to public at release. |
 | 5 | Pilot | No pre-chosen pilot — the first institution to submit a NAF, with full operator review (§4.1). |
