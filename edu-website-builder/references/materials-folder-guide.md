@@ -34,7 +34,16 @@ core and which depend on a form tick.
 | `12-portal-roster` | Student/staff portal ticked |
 | `13-committees-societies` | "Committees/Societies" ticked |
 | `14-contact-details` | "Contact" ticked |
+| `15-roles-and-offices` | Any portal or directorate ticked (form §11) |
+| `16-mobile-app` | Mobile app ticked (form §8) |
+| `17-qec` | QEC ticked |
+| `18-student-societies` | Student Affairs / Societies ticked |
+| `19-sports` | Sports Directorate ticked |
+| `20-hostel` | Hostel / Provost ticked |
+| `21-journal-and-blog` | Academic blog or research journal ticked |
 | `99-anything-else` | Always (catch-all) |
+
+Scaffold keys for these: `roles mobileapp qec societies sports hostel journal`.
 
 Alumni needs **no** intake folder — alumni add themselves through the site's
 self-registration form.
@@ -85,7 +94,11 @@ One **subfolder per department, named as the department** (e.g.
 `Geography/`, `Computer Science/`). Inside each:
 - A **banner image** (landscape) — name it `banner.jpg`.
 - `profile.md` (or `.docx`): intro, vision, mission, programme/degree details
-  (name, duration, seats, fee, affiliation), notable achievements.
+  (name, duration, seats, fee, affiliation), notable achievements, research.
+- **Scheme of studies**: `scheme-of-studies.pdf`, or a `.csv` with headers
+  `semester,course_code,course_title,credit_hours`.
+- Optional `labs/` subfolder of lab/department photos (feeds the sub-site gallery)
+  and an `accent.txt` with the department's own hex colour.
 - A **`faculty/`** subfolder containing:
   - one **portrait per teacher, named as their full name** (`Zulfiqar Ali.jpg`),
   - a **`faculty.csv`** with headers:
@@ -132,8 +145,15 @@ added in the admin screens later. Use these exact headers:
 - `students.csv`: `registration_no,first_name,last_name,program_code,section,
   google_email,personal_email,cnic_or_bform`
 - `programs.csv`: `code,name,level`
+- `guardians.csv`: `registration_no,guardian_name,relation,phone_e164,email`
+  (phone in international form, e.g. `+923001234567` — parent links are
+  verified against it)
+- `offerings.csv`: `subject_code,section,term,teacher_google_email,combined_with_sections`
+  (`combined_with_sections` = other sections taught together, separated by `;`)
 - `sections.csv`, `subjects.csv`, `enrollments.csv`, `timetable.csv` — the skill
   supplies blank templates in this folder if you scaffold it; fill what applies.
+  If the timetable only exists as a printed/PDF sheet, drop that in instead — it
+  can be transcribed.
 - **Never** put real passwords in these files.
 
 ### `13-committees-societies/`
@@ -146,6 +166,37 @@ Per committee, a subfolder named as the committee, containing:
 - `contact.txt`: postal address, phone number(s), public email, office hours,
   and the **email address(es) that should receive contact-form messages**.
 - `map.txt` (optional): latitude,longitude or a Google Maps link.
+
+### `15-roles-and-offices/`
+- `offices.csv`, headers: `office,department,full_name,official_email` — one row
+  per office (Principal, VP Academics, Controller of Exams, Timetable in-charge,
+  Director QEC, Provost, Bursar…) and one per department HoD/coordinator.
+  Access is granted to the office's email, so staff transfers are a data change.
+
+### `16-mobile-app/`
+- `app-icon.png` (1024×1024, square, no transparency), `app-name.txt`.
+- `custodian.txt`: who keeps the app's signing key. **Never** put the key here.
+
+### `17-qec/`
+- The questionnaire (only if not the HEC standard), SAR/QEC PDFs to publish,
+  and `cycles.txt` with the evaluation windows.
+
+### `18-student-societies/`
+- `societies.csv`: `society,incharge_name,incharge_email,description`
+- `cabinet.csv`: `name,position,program,photo`
+- One logo/photo per society named as the society; `events.csv` as in `08-events`.
+
+### `19-sports/`
+- `disciplines.csv`: `discipline,incharge_name,season,venue`, plus photos.
+
+### `20-hostel/`
+- `rooms.csv`: `hostel,block,room,bed,status` — **one row per bed**
+  (`status` = `vacant`/`occupied`/`damaged`).
+- `rules.md`: rules, fee, and the merit formula; hostel photos.
+
+### `21-journal-and-blog/`
+- `journal.txt` (name, ISSN, scope, frequency), `author-guidelines.md`,
+  `editorial-board.csv`: `name,role,affiliation,email,photo`, back issues as PDF.
 
 ### `99-anything-else/`  *(always)*
 Anything that doesn't fit above — extra photos, reference material, notes,

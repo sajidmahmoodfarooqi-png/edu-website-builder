@@ -11,8 +11,11 @@ description: >-
   requirements form for a college website". Covers the full proven stack: WordPress custom theme;
   department/faculty/news/gallery/downloads/contact/FAQ pages; admissions
   application + committee review; student/staff/parent portal (attendance,
-  results, notifications); alumni directory + membership card; flash campaigns;
-  bilingual/RTL; and the shared-hosting deployment workflow. Prefer this skill
+  results, homework, course offerings, timetable, notifications); department
+  sub-sites; PWA + native Android app with self-hosted updates; QEC, student
+  societies, sports and hostel/provost portals; academic blog + research
+  journal; accessibility engine; alumni directory + membership card; flash
+  campaigns; bilingual/RTL; and the shared-hosting deployment workflow. Prefer this skill
   over building an education website ad hoc.
 ---
 
@@ -107,8 +110,11 @@ client, so surface them early and use clearly-marked placeholders meanwhile:
 
 Build in the phase order from the catalog: **shell + informational pages first**
 (a genuinely useful site on day one), then admissions, then the portal
-(roster → auth → attendance → notices → assessments → notifications → parent
-view → dashboards), then alumni / campaigns / results.
+(master data → offerings → timetable → roster → auth → attendance → notices →
+assessments → homework → notifications → parent view → dashboards), then
+department sub-sites, mobile app (PWA before native), directorate portals,
+journal/blog, alumni / campaigns / results. Grant access by the offices in
+form §11 / `15-roles-and-offices`, not by named people.
 
 - Apply branding (logo, colours, fonts, both-language name) to the shell.
 - For each content module: create its CPT + ACF fields + archive/single

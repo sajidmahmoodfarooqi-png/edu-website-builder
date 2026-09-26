@@ -35,6 +35,24 @@ services, no VPS:
   directory, and a private, printable **membership card**.
 - **Admin conveniences** — a webmaster health-check dashboard, roster CSV imports,
   a timetable grid, and scheduled flash-announcement campaigns.
+- **Academic operations** *(added Sept 2026)* — course offerings and teacher
+  allotment with combined cohorts and parallel electives, a clash-checked
+  timetable with its own In-charge portal, homework, nightly parent absence
+  digests, and department-scoped roles (VP Academics, HoDs, coordinators).
+- **Department sub-sites** — 15 self-contained tabbed department sites on their
+  own subdomains, served by one shared router.
+- **Mobile app** — installable PWA plus a native Android app (student, faculty,
+  parent) on a JSON API, with Google Sign-In and self-hosted over-the-air updates
+  (no Play Store).
+- **Directorates** — Quality Enhancement Cell (anonymous HEC-rubric teacher
+  evaluations, SAR), Student Affairs societies & events, Sports Directorate
+  (trials, squads, fixtures), and Hostel/Provost (merit admissions, bed rack,
+  bursar clearance, gate passes, roll-call).
+- **Scholarship & heritage** — an academic blog and a peer-reviewed e-journal
+  (institutional-email submissions, consent-based review), and a heritage
+  timeline and archive back to the college's 1904 founding.
+- **Accessibility** — an audio daily briefing for blind students, read-aloud
+  notices in English and Urdu, high-contrast mode, and a screen-reader timetable.
 - Built responsive and accessible, hardened (security headers, upload
   re-encoding, no-cache discipline across CDN/page-cache/opcache layers), and
   deployed with a safe, credential-preserving workflow.
@@ -55,6 +73,13 @@ requirements gathered **once**, upfront:
 3. **Hand it to the AI skill** — it reads the form, produces a build plan, scaffolds
    the site and every chosen module with your branding, populates from your folders,
    flags what's still missing, and deploys only on your go-ahead.
+
+## Where it is going
+
+A design for turning this kit into a website-building agent — a de-branded
+module library, an `institution.json` spec compiled from the form, a deterministic
+generator, and a Claude Agent SDK agent with human approval gates — is drafted in
+[`docs/AGENT_DESIGN.md`](docs/AGENT_DESIGN.md).
 
 ## What's in this repo
 

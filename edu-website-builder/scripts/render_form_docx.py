@@ -44,9 +44,29 @@ def add_runs(p, text):
         else:
             p.add_run(tok)
 
+def cells(row):
+    return [c.strip() for c in row.strip().strip("|").split("|")]
+
+def add_table(rows):
+    header, body = cells(rows[0]), [cells(r) for r in rows[2:]]  # rows[1] is the |---| rule
+    t = doc.add_table(rows=1 + len(body), cols=len(header))
+    t.style = "Table Grid"
+    for j, h in enumerate(header):
+        c = t.rows[0].cells[j]; c.text = ""
+        r = c.paragraphs[0].add_run(h); r.bold = True; r.font.color.rgb = NAVY
+    for i, row in enumerate(body, start=1):
+        for j, val in enumerate(row):
+            c = t.rows[i].cells[j]; c.text = ""
+            add_runs(c.paragraphs[0], val)
+
 lines = src.splitlines()
-for raw in lines:
+table = []
+for raw in lines + [""]:
     line = raw.rstrip()
+    if line.lstrip().startswith("|"):
+        table.append(line); continue
+    if table:
+        add_table(table); table = []
     if not line.strip():
         continue
     if line.strip() == "---":
@@ -77,7 +97,8 @@ for raw in lines:
         continue
     if re.match(r"^\s*[-*]\s+", line):
         content = re.sub(r"^\s*[-*]\s+", "", line)
-        p = doc.add_paragraph(); p.paragraph_format.left_indent = Inches(0.2)
+        depth = (len(line) - len(line.lstrip())) // 6  # the form nests sub-items by 6 spaces
+        p = doc.add_paragraph(); p.paragraph_format.left_indent = Inches(0.2 + 0.3 * depth)
         p.paragraph_format.space_after = Pt(3)
         if not re.match(r"^\[[ xX]\]", content):
             p.add_run("•  ")

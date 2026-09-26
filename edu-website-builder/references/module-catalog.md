@@ -141,14 +141,119 @@ manager" for non-technical staff. *Needs:* nothing upfront.
 **Security hardening** (always, once dynamic features exist) — hardening headers
 (X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy, HSTS), disable
 XML-RPC/pingback, block user-enumeration (REST users + `?author=`), remove
-version-disclosure files. Theme code, no plugin.
+version-disclosure files, and a **brute-force lockout on `wp-login.php`**.
+Theme code, no plugin. Default passcodes on any front-end portal are stored
+hashed and must be rotated at handover — never written into docs or git.
+
+---
+
+## Modules added after the first release (proven on the live build, Sept 2026)
+
+**Department / directorate sub-sites** — each department (and each directorate
+below) gets a self-contained tabbed mini-site (overview, faculty, scheme of
+studies, research, labs gallery, contact) served by **one shared template +
+a router**, reachable both as a path (`/geography/`) and, if DNS allows, a
+subdomain (`geography.example.edu.pk`). Keep a static manifest of slugs and
+aliases (`cs` → `computer-science`) so every surface resolves the same way;
+serve subdomains through the one bootstrap rather than per-subdomain docroots.
+Gate nav links on the target template existing. *Needs:* DNS control (§2),
+per-department accent colour/banner, scheme-of-studies data.
+
+**Academic operations** (extends the portal) — programmes / terms / subjects /
+sections master data; **course offerings** where department coordinators allot
+teachers to subject+section, with **combined cohorts** (one offering covering
+several sections/departments) and **parallel electives**; a **timetable grid**
+with teacher/room/section clash checks, variable period lengths, and a
+front-end **Timetable In-charge portal** restricted to the named office. The
+teacher-ownership gate (a teacher may only mark/enter for offerings they own,
+403 otherwise) is enforced in both web handlers and the API. Combined periods
+must write attendance for **every** section in the cohort, grouped on the same
+key the save uses. *Needs:* offerings/allotments, current timetable.
+
+**Homework + nightly parent digests** — teacher-posted homework per offering;
+a cron job that rolls up the day's absences into one email per guardian.
+*Needs:* guardian contacts.
+
+**Role hierarchy** — beyond student/teacher/parent: Principal (read-only),
+VP Academics, **department-scoped** HoDs and coordinators (see only their own
+department), Controller of Examinations, timetable committee, registrar. Map
+roles to offices, not people, so staff transfers are a data change. *Needs:*
+the office list (form §11).
+
+**Mobile app** — three tiers, cheapest first: (1) **PWA** (manifest + service
+worker, installable from the browser); (2) Trusted Web Activity wrapper;
+(3) **native Android (Jetpack Compose) app** on a JSON REST API
+(`/wp-json/<ns>/v1/…`) with SHA-256-hashed bearer tokens, Google Sign-In via
+the browser, and a student/parent shell + faculty shell (classes, roll,
+marks, homework, notices). **Self-hosted OTA updates** (a version endpoint +
+APK on the institution's own server; optional forced update) avoid Google
+Play. Parent links open in-app via Android App Links (`assetlinks.json`).
+**Never let the page cache store authenticated API responses** (a real
+cross-account leak on the live build) and handle LiteSpeed stripping the
+`Authorization` header (`REDIRECT_HTTP_AUTHORIZATION` fallback). One
+production keystore per institution, kept by a named custodian. *Needs:*
+tier choice, keystore custodian, app name/icon.
+
+**Accessibility engine** — a floating accessibility control (high contrast,
+font scaling, keyboard shortcuts), an **audio daily briefing** of today's
+classes/attendance using the browser's speech synthesis (English + Urdu
+voices; handle Chrome's empty first `getVoices()` and its ~15 s cut-off), a
+list-view timetable for screen readers, “Listen” buttons on notices,
+`role="alert"` form errors; TalkBack merged semantics + haptics in the app.
+Pair it with a staff publishing rule: no image-only notices. *Needs:* whether
+any students rely on assistive tech.
+
+**Help Centre** — per-role how-to pages (`/portal/help/`), screenshot
+walkthroughs and an optional in-dashboard guided tour; bilingual FAQ entries
+for every portal and the app. Don't advertise videos that don't exist.
+
+**QEC portal** — controlled evaluation cycles; the HEC-style questionnaire;
+responses **anonymous but de-duplicated** by hashing student + offering +
+cycle; Director analytics; public SAR documents. *Needs:* rubric, cycle dates.
+
+**Student Affairs / Societies portal** — societies directory, cabinet roster,
+events calendar (auto-archives past events), membership applications approved
+by the in-charge; high-priority events can cross-post as portal notices.
+
+**Sports Directorate portal** — disciplines, events, fixtures/results, student
+trial registration, trial scoring (0–10) and squad building, CSV export.
+
+**Hostel / Provost portal** — merit-based hostel application (configurable
+formula, e.g. marks% × 0.6 + capped distance × 0.4) with public merit search;
+Provost control centre: room-and-bed rack (occupied/vacant/damaged, race-safe
+bed transfer), scrutiny + provisional allotment with challan, **bursar
+fee-clearance** that activates the resident, leave approval, night roll-call,
+complaints; resident self-service (gate passes, complaints, attendance).
+Beds under a formal allotment are protected from direct edits.
+
+**Academic blog + research journal** — two tracks on one submission system:
+blog articles and a peer-reviewed journal with an editor-set submission window,
+**institutional-email-only** submissions (enforced server-side), and a
+consent-based editorial review step before publication.
+
+**Heritage & history** — timeline, historical photo archive with a lightbox
+scoped to the clicked set, founding documents; Schema.org JSON-LD
+(`CollegeOrUniversity`) + Open Graph for rich link previews.
+
+**Webmaster health check** — read-only admin dashboard that flags 404s,
+schema drift, and faculty-directory ↔ department-page drift, with explicit
+confirm-to-fix sync. Pair with a **pre-flight quality shield** script run
+before each deploy (PHP lint, CSS isolation, clean mirror).
+
+**WhatsApp absence alerts (off-site, optional)** — kept *outside* the website:
+a free desktop tool on an office PC where staff review absences and send
+templated local-language messages. The site itself stays free of paid SMS /
+WhatsApp Business APIs.
 
 ---
 
 ## Phasing
 
 A typical order: **shell + informational pages** first (a real, useful site on
-day one), then admissions, then the student portal (roster → auth → attendance →
-notices → assessments → notifications → parent view → dashboards), then alumni /
-campaigns / results as wanted. Ship each phase working and tested before the
+day one), then admissions, then the student portal (master data → offerings →
+timetable → roster → auth → attendance → notices → assessments → homework →
+notifications → parent view → dashboards), then department sub-sites, the
+mobile app (PWA first, native later), directorate portals (QEC, societies,
+sports, hostel), journal/blog, alumni / campaigns / results as wanted.
+Accessibility and the help centre grow alongside each phase, not at the end. Ship each phase working and tested before the
 next. Don't build a login area before there's content worth logging in for.
