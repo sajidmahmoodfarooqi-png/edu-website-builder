@@ -32,6 +32,23 @@ private repo.
 
 ## Session ledger
 
+### Model tiering + token-lean framework loading — Status & Handoff, 2026-09-29
+- **Changes Made** (machine-wide config, outside this repo): four global subagents in
+  `~/.claude/agents/` — `quick-helper` (Haiku 4.5), `builder` (Sonnet 5.5),
+  `precision-engineer` (Opus 5.5), `deep-reasoner` (Fable 5.1, rare). Routing table added
+  as §1a of `~/.claude/CLAUDE.md`; §5 there now points to the digest. `"model": "opusplan"`
+  in `~/.claude/settings.json`. `G:\CLAUDE.md` = `G:\Projects\CLAUDE.md` (kept identical)
+  gained §4: a ~500-token always-on digest of CLAUDE_SUPER_INSTRUCTION/AGENTS/GEMINI;
+  full files are read only on triggers, inside `precision-engineer`/`builder`
+  (a ~4K-token auto-import was tried and removed for token cost). Fixed 9 null bytes
+  (project numbers 01–09) in both root CLAUDE.md files; other G:\ instruction files clean.
+- **Database / Schema**: none.
+- **Verification**: settings.json parses (`model` = opusplan); both root CLAUDE.md files
+  byte-identical, 0 null bytes, no `@` imports left. Backups deleted.
+- **Next Steps**: Antigravity: if you edit `G:\CLAUDE.md`, mirror it to
+  `G:\Projects\CLAUDE.md` and save as UTF-8 (the null-byte fault came from a save).
+  Project roadmap unchanged — Phase A inventory hand-back still pending.
+
 ### Agent design + NAF v2 — Status & Handoff, 2026-09-25/26
 - **Changes Made**: NAF v2 (15 sections: mobile app, directorates, academic ops,
   accessibility, roles, security/handover, code-prefix field); module catalog, gotchas,
